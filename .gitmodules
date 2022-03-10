@@ -1,0 +1,3 @@
+[submodule "ctucanfd_ip_core"]
+	path = ctucanfd_ip_core
+	url = https://github.com/Blebowski/CTU-CAN-FD
