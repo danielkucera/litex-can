@@ -31,6 +31,11 @@ class _CRG(Module):
 # CANSoC -------------------------------------------------------------------------------------
 
 class CANSoC(SoCMini):
+    mem_map = {
+        "canfd": 0xb0000000,
+    }
+    mem_map.update(SoCMini.mem_map)
+
     def __init__(self, platform):
         sys_clk_freq = int(27e6)
         SoCMini.__init__(self, platform, sys_clk_freq)
@@ -43,6 +48,11 @@ class CANSoC(SoCMini):
 
         can = canfd.CANFD(platform, platform.request("can_tx"), platform.request("can_rx"))
         self.submodules += can
+
+        self.add_memory_region("canfd", self.mem_map["canfd"], 0x100000, type="io")
+
+        self.add_wb_slave(self.mem_map["canfd"], can.bus)
+        self.add_csr("canfd")
 
 # Build --------------------------------------------------------------------------------------------
 
